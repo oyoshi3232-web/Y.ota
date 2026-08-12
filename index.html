@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no">
+
+<title>QRコード読み取りテスト</title>
+
+<!-- QRコード読み取りライブラリ -->
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Helvetica Neue",
+        "Yu Gothic",
+        "Meiryo",
+        sans-serif;
+
+    background: #eaf8ff;
+    color: #333;
+}
+
+body {
+    padding: 15px;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    padding: 15px 5px;
+}
+
+.header-icon {
+    font-size: 60px;
+}
+
+h1 {
+    margin: 5px 0;
+    font-size: 28px;
+    color: #147da3;
+}
+
+.description {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.6;
+}
+
+.card {
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 5px 18px rgba(0,0,0,0.12);
+}
+
+.status {
+    text-align: center;
+    padding: 15px;
+
+    border-radius: 15px;
+
+    background: #f2f2f2;
+
+    font-weight: bold;
+    line-height: 1.6;
+}
+
+#reader {
+    width: 100%;
+    margin-top: 15px;
+
+    border-radius: 20px;
+    overflow: hidden;
+
+    background: #111;
+}
+
+button {
+    width: 100%;
+
+    border: none;
+    border-radius: 18px;
+
+    padding: 17px;
+
+    margin-top: 15px;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    color: white;
+
+    background: #ff8a3d;
+
+    box-shadow:
+        0 5px 0 #d96520;
+}
+
+button:active {
+    transform: translateY(4px);
+
+    box-shadow:
+        0 1px 0 #d96520;
+}
+
+button.stop {
+    background: #777;
+
+    box-shadow:
+        0 5px 0 #555;
+}
+
+.result {
+    display: none;
+
+    margin-top: 20px;
+
+    padding: 20px;
+
+    border-radius: 20px;
+
+    background: #fff4a8;
+
+    border: 3px solid #ffd23c;
+}
+
+.result-title {
+    text-align: center;
+
+    font-size: 24px;
+    font-weight: 900;
+
+    color: #e57a00;
+}
+
+.result-text {
+    margin-top: 15px;
+
+    padding: 15px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    line-height: 1.6;
+
+    word-break: break-word;
+
+    white-space: pre-wrap;
+}
+
+.error {
+    display: none;
+
+    margin-top: 15px;
+
+    padding: 15px;
+
+    border-radius: 15px;
+
+    background: #ffe0e0;
+
+    color: #b00000;
+
+    font-weight: bold;
+
+    line-height: 1.6;
+}
+
+.small {
+    font-size: 13px;
+    color: #777;
+    line-height: 1.6;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <div class="header-icon">
+            📷
+        </div>
+
+        <h1>
+            QRコードを読もう！
+        </h1>
+
+        <div class="description">
+            QRコードをカメラに映してください。
+        </div>
+
+    </div>
+
+
+    <!-- 状態表示 -->
+
+    <div class="card">
+
+        <div id="status"
+             class="status">
+
+            「カメラを起動」を押してください。
+
+        </div>
+
+    </div>
+
+
+    <!-- カメラ -->
+
+    <div class="card">
+
+        <div id="reader"></div>
+
+        <button
+            id="startButton"
+            onclick="startScanner()">
+
+            📷 カメラを起動
+
+        </button>
+
+        <button
+            id="stopButton"
+            class="stop"
+            onclick="stopScanner()"
+            style="display:none;">
+
+            ⏹ カメラを停止
+
+        </button>
+
+    </div>
+
+
+    <!-- 読み取った文字 -->
+
+    <div
+        id="result"
+        class="result">
+
+        <div class="result-title">
+
+            🎉 QRコードを読み取りました！
+
+        </div>
+
+        <div
+            id="resultText"
+            class="result-text">
+        </div>
+
+    </div>
+
+
+    <!-- エラー -->
+
+    <div
+        id="error"
+        class="error">
+    </div>
+
+
+    <div class="card small">
+
+        <strong>対応予定端末</strong><br><br>
+
+        iPhone / Safari<br>
+        iPhone / Chrome<br>
+        Android / Chrome<br>
+        Android / Firefox<br>
+        Android / Samsung Internet<br>
+        iPad / Androidタブレット
+
+        <br><br>
+
+        ※カメラを使用するため、
+        HTTPSで公開されたページから
+        起動してください。
+
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+==========================================================
+ QRコード読み取り
+==========================================================
+*/
+
+let scanner = null;
+
+let scannerRunning = false;
+
+let readingLock = false;
+
+
+/*
+----------------------------------------------------------
+ ステータス表示
+----------------------------------------------------------
+*/
+
+function setStatus(message) {
+
+    document.getElementById("status")
+        .innerHTML = message;
+
+}
+
+
+/*
+----------------------------------------------------------
+ エラー表示
+----------------------------------------------------------
+*/
+
+function showError(message) {
+
+    const error =
+        document.getElementById("error");
+
+    error.innerHTML = message;
+
+    error.style.display = "block";
+
+}
+
+
+/*
+----------------------------------------------------------
+ エラー消去
+----------------------------------------------------------
+*/
+
+function clearError() {
+
+    const error =
+        document.getElementById("error");
+
+    error.innerHTML = "";
+
+    error.style.display = "none";
+
+}
+
+
+/*
+----------------------------------------------------------
+ カメラ開始
+----------------------------------------------------------
+*/
+
+async function startScanner() {
+
+    clearError();
+
+    readingLock = false;
+
+    setStatus(
+        "📷 カメラを起動しています…"
+    );
+
+
+    /*
+    ------------------------------------------------------
+     HTTPSチェック
+    ------------------------------------------------------
+    */
+
+    if (
+        location.protocol !== "https:" &&
+        location.hostname !== "localhost" &&
+        location.hostname !== "127.0.0.1"
+    ) {
+
+        showError(
+            "🔒 このページはHTTPSで開く必要があります。<br><br>" +
+            "QRコードを読むには、https:// から始まるページで開いてください。"
+        );
+
+        setStatus(
+            "❌ HTTPSが必要です"
+        );
+
+        return;
+    }
+
+
+    /*
+    ------------------------------------------------------
+     ブラウザのカメラ機能チェック
+    ------------------------------------------------------
+    */
+
+    if (
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+    ) {
+
+        showError(
+            "このブラウザではカメラ機能を利用できません。<br><br>" +
+            "iPhoneの場合はSafari、Androidの場合はChromeをお試しください。"
+        );
+
+        setStatus(
+            "❌ カメラに対応していません"
+        );
+
+        return;
+    }
+
+
+    /*
+    ------------------------------------------------------
+     カメラ権限を確認
+    ------------------------------------------------------
+    */
+
+    let testStream = null;
+
+    try {
+
+        testStream =
+            await navigator.mediaDevices.getUserMedia({
+
+                video: {
+                    facingMode: {
+                        ideal: "environment"
+                    }
+                },
+
+                audio: false
+
+            });
+
+
+    } catch (error) {
+
+        handleCameraError(error);
+
+        return;
+
+    } finally {
+
+        if (testStream) {
+
+            testStream
+                .getTracks()
+                .forEach(track => {
+                    track.stop();
+                });
+
+        }
+
+    }
+
+
+    /*
+    ------------------------------------------------------
+     QRリーダー作成
+    ------------------------------------------------------
+    */
+
+    try {
+
+        if (scanner) {
+
+            try {
+                await scanner.clear();
+            } catch(e) {}
+
+            scanner = null;
+
+        }
+
+
+        scanner =
+            new Html5Qrcode("reader");
+
+
+        const config = {
+
+            fps: 10,
+
+            qrbox: function(
+                width,
+                height
+            ) {
+
+                const size =
+                    Math.min(
+                        width,
+                        height
+                    ) * 0.7;
+
+                return {
+
+                    width: Math.floor(size),
+
+                    height: Math.floor(size)
+
+                };
+
+            },
+
+            aspectRatio: 1.0,
+
+            rememberLastUsedCamera: true
+
+        };
+
+
+        /*
+        --------------------------------------------------
+         背面カメラ優先
+        --------------------------------------------------
+        */
+
+        await scanner.start(
+
+            {
+                facingMode: "environment"
+            },
+
+            config,
+
+            onQRCodeSuccess,
+
+            onQRCodeFailure
+
+        );
+
+
+        scannerRunning = true;
+
+
+        document.getElementById(
+            "startButton"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "stopButton"
+        ).style.display = "block";
+
+
+        setStatus(
+            "📷 QRコードをカメラに映してください。"
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        handleCameraError(error);
+
+    }
+
+}
+
+
+/*
+----------------------------------------------------------
+ カメラエラー処理
+----------------------------------------------------------
+*/
+
+function handleCameraError(error) {
+
+    console.error(
+        "Camera Error:",
+        error
+    );
+
+
+    let message = "";
+
+
+    if (
+        error.name ===
+        "NotAllowedError"
+    ) {
+
+        message =
+            "📵 カメラの使用が許可されていません。<br><br>" +
+
+            "iPhone：<br>" +
+            "Safariのカメラ使用許可を確認してください。<br><br>" +
+
+            "Android：<br>" +
+            "Chromeのカメラ使用許可を確認してください。";
+
+    }
+
+    else if (
+        error.name ===
+        "NotFoundError"
+    ) {
+
+        message =
+            "📷 カメラが見つかりませんでした。";
+
+    }
+
+    else if (
+        error.name ===
+        "NotReadableError"
+    ) {
+
+        message =
+            "📷 カメラを使用できません。<br><br>" +
+            "他のアプリがカメラを使用していないか確認してください。";
+
+    }
+
+    else if (
+        error.name ===
+        "SecurityError"
+    ) {
+
+        message =
+            "🔒 ブラウザのセキュリティ設定により、" +
+            "カメラを使用できません。";
+
+    }
+
+    else if (
+        error.name ===
+        "TypeError"
+    ) {
+
+        message =
+            "🔒 カメラを使用できないページ環境です。<br><br>" +
+            "HTTPSのページを直接開いてください。";
+
+    }
+
+    else {
+
+        message =
+            "カメラを起動できませんでした。<br><br>" +
+
+            "エラー：" +
+            (error.name || "Unknown") +
+            "<br><br>" +
+
+            (error.message || "");
+
+    }
+
+
+    showError(message);
+
+    setStatus(
+        "❌ カメラを起動できませんでした"
+    );
+
+}
+
+
+/*
+----------------------------------------------------------
+ QR読み取り成功
+----------------------------------------------------------
+*/
+
+async function onQRCodeSuccess(
+    decodedText,
+    decodedResult
+) {
+
+    /*
+     * 連続読み取り防止
+     */
+
+    if (readingLock) {
+        return;
+    }
+
+    readingLock = true;
+
+
+    console.log(
+        "QR DATA:",
+        decodedText
+    );
+
+
+    /*
+    ------------------------------------------------------
+     読み取った文字を表示
+    ------------------------------------------------------
+    */
+
+    document.getElementById(
+        "resultText"
+    ).textContent = decodedText;
+
+
+    document.getElementById(
+        "result"
+    ).style.display = "block";
+
+
+    setStatus(
+        "🎉 QRコードの読み取りに成功しました！"
+    );
+
+
+    /*
+    ------------------------------------------------------
+     カメラ停止
+    ------------------------------------------------------
+    */
+
+    await stopScanner();
+
+
+}
+
+
+/*
+----------------------------------------------------------
+ QR読み取り中
+----------------------------------------------------------
+*/
+
+function onQRCodeFailure(errorMessage) {
+
+    /*
+     * QRがまだ見つからないだけなので、
+     * ここでは何もしません。
+     */
+
+}
+
+
+/*
+----------------------------------------------------------
+ カメラ停止
+----------------------------------------------------------
+*/
+
+async function stopScanner() {
+
+    if (!scanner) {
+        return;
+    }
+
+
+    try {
+
+        if (scannerRunning) {
+
+            await scanner.stop();
+
+        }
+
+    } catch(error) {
+
+        console.log(
+            "Scanner stop error:",
+            error
+        );
+
+    }
+
+
+    try {
+
+        await scanner.clear();
+
+    } catch(error) {
+
+        console.log(
+            "Scanner clear error:",
+            error
+        );
+
+    }
+
+
+    scannerRunning = false;
+
+    scanner = null;
+
+
+    document.getElementById(
+        "startButton"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "stopButton"
+    ).style.display = "none";
+
+
+}
+
+
+/*
+----------------------------------------------------------
+ ページを閉じるときにカメラ停止
+----------------------------------------------------------
+*/
+
+window.addEventListener(
+    "beforeunload",
+    function() {
+
+        if (scanner) {
+
+            try {
+                scanner.stop();
+            } catch(e) {}
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
