@@ -2,866 +2,365 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,
-               initial-scale=1.0,
-               maximum-scale=1.0,
-               user-scalable=no">
-
-<title>QRコード読み取りテスト</title>
-
-<!-- QRコード読み取りライブラリ -->
-<script src="https://unpkg.com/html5-qrcode"></script>
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#63c7ed">
+<title>せなみ探検隊！5つのスタンプを集めよう！</title>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <style>
-
-* {
-    box-sizing: border-box;
-}
-
-html,
-body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100%;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Helvetica Neue",
-        "Yu Gothic",
-        "Meiryo",
-        sans-serif;
-
-    background: #eaf8ff;
-    color: #333;
-}
-
-body {
-    padding: 15px;
-}
-
-.container {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-.header {
-    text-align: center;
-    padding: 15px 5px;
-}
-
-.header-icon {
-    font-size: 60px;
-}
-
-h1 {
-    margin: 5px 0;
-    font-size: 28px;
-    color: #147da3;
-}
-
-.description {
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 1.6;
-}
-
-.card {
-    background: white;
-    border-radius: 24px;
-    padding: 20px;
-    margin-bottom: 15px;
-
-    box-shadow:
-        0 5px 18px rgba(0,0,0,0.12);
-}
-
-.status {
-    text-align: center;
-    padding: 15px;
-
-    border-radius: 15px;
-
-    background: #f2f2f2;
-
-    font-weight: bold;
-    line-height: 1.6;
-}
-
-#reader {
-    width: 100%;
-    margin-top: 15px;
-
-    border-radius: 20px;
-    overflow: hidden;
-
-    background: #111;
-}
-
-button {
-    width: 100%;
-
-    border: none;
-    border-radius: 18px;
-
-    padding: 17px;
-
-    margin-top: 15px;
-
-    font-size: 20px;
-    font-weight: bold;
-
-    color: white;
-
-    background: #ff8a3d;
-
-    box-shadow:
-        0 5px 0 #d96520;
-}
-
-button:active {
-    transform: translateY(4px);
-
-    box-shadow:
-        0 1px 0 #d96520;
-}
-
-button.stop {
-    background: #777;
-
-    box-shadow:
-        0 5px 0 #555;
-}
-
-.result {
-    display: none;
-
-    margin-top: 20px;
-
-    padding: 20px;
-
-    border-radius: 20px;
-
-    background: #fff4a8;
-
-    border: 3px solid #ffd23c;
-}
-
-.result-title {
-    text-align: center;
-
-    font-size: 24px;
-    font-weight: 900;
-
-    color: #e57a00;
-}
-
-.result-text {
-    margin-top: 15px;
-
-    padding: 15px;
-
-    background: white;
-
-    border-radius: 12px;
-
-    font-size: 18px;
-
-    font-weight: bold;
-
-    line-height: 1.6;
-
-    word-break: break-word;
-
-    white-space: pre-wrap;
-}
-
-.error {
-    display: none;
-
-    margin-top: 15px;
-
-    padding: 15px;
-
-    border-radius: 15px;
-
-    background: #ffe0e0;
-
-    color: #b00000;
-
-    font-weight: bold;
-
-    line-height: 1.6;
-}
-
-.small {
-    font-size: 13px;
-    color: #777;
-    line-height: 1.6;
-}
-
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:#fff3bd;color:#333}
+body{overflow-x:hidden}
+#app{max-width:520px;min-height:100vh;margin:auto;padding:14px;background:linear-gradient(#70d4f5 0,#dff8ff 48%,#fff3bd 100%)}
+.screen{display:none;animation:fade .3s ease}.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:rgba(255,255,255,.96);border-radius:26px;padding:20px;margin-bottom:15px;box-shadow:0 7px 18px rgba(0,0,0,.12)}
+.logo{text-align:center;padding:18px 4px 8px}.logoIcon{font-size:78px;animation:bounce 1.5s infinite}
+@keyframes bounce{50%{transform:translateY(-9px)}}
+h1{font-size:32px;line-height:1.25;color:#145c7c;margin:8px 0;font-weight:900;text-shadow:2px 2px white}
+h2{margin:0 0 12px;color:#145c7c;font-size:25px}
+p{line-height:1.7}
+.bigBtn{width:100%;border:0;border-radius:20px;padding:17px 14px;margin-top:10px;font-size:20px;font-weight:900;color:white;background:#ff8b3d;box-shadow:0 5px #d96620}
+.bigBtn:active{transform:translateY(4px);box-shadow:0 1px #d96620}
+.blue{background:#4fbbe4;box-shadow:0 5px #2589b0}.green{background:#55c96e;box-shadow:0 5px #299745}.gray{background:#777;box-shadow:0 5px #555}
+.progress{text-align:center}.count{font-size:44px;font-weight:900;color:#f17828}.bar{height:17px;background:#ddd;border-radius:20px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#ff983f,#ffd348);transition:.5s}
+.stamps{display:grid;grid-template-columns:1fr 1fr;gap:11px}.stamp{min-height:142px;border-radius:20px;background:#eee;border:4px solid #ddd;text-align:center;padding:12px;position:relative}.stamp.got{background:#fff3a3;border-color:#ffca28;animation:pop .45s}.stampIcon{font-size:47px}.stampNo{font-size:13px;font-weight:900;color:#777}.stampName{font-size:15px;font-weight:900}.check{font-size:26px;color:#28a849}
+@keyframes pop{0%{transform:scale(.7)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
+#reader{width:100%;overflow:hidden;border-radius:20px;background:#111}.status{text-align:center;padding:13px;border-radius:15px;background:#f1f1f1;font-weight:800;line-height:1.6}.error{display:none;margin-top:12px;padding:13px;border-radius:15px;background:#ffe1e1;color:#a40000;font-weight:800}
+.result{text-align:center}.star{font-size:100px;animation:star .65s}.getTitle{font-size:38px;color:#f27627;font-weight:900}
+@keyframes star{0%{transform:scale(.1) rotate(-30deg);opacity:0}70%{transform:scale(1.15) rotate(8deg)}100%{transform:none;opacity:1}}
+.complete{text-align:center}.completeIcon{font-size:100px;animation:pop .7s}.complete h1{font-size:40px;color:#f06c2c}
+.note{font-size:12px;color:#777;text-align:center}
 </style>
-
 </head>
-
 <body>
+<div id="app">
 
-<div class="container">
+<section id="start" class="screen active">
+  <div class="logo">
+    <div class="logoIcon">🌊</div>
+    <h1>せなみ探検隊！<br>5つのスタンプを集めよう！</h1>
+    <p><strong>施設の中にある5つのQRコードを探して、<br>スタンプを集めよう！</strong></p>
+  </div>
+  <div class="card">
+    <h2>🎒 ミッション</h2>
+    <p>① QRコードを探す<br>② カメラで読み取る<br>③ スタンプGET！<br>④ 5個集めたらコンプリート！🎉</p>
+    <button class="bigBtn" onclick="startGame()">🚀 探検スタート！</button>
+  </div>
+  <div class="card">
+    <p style="text-align:center;font-weight:900;font-size:18px">📱 アプリのインストールは不要です</p>
+    <p style="text-align:center">iPhoneはSafari、AndroidはChromeなどのブラウザで遊べます。</p>
+  </div>
+</section>
 
-    <div class="header">
+<section id="game" class="screen">
+  <div class="card progress">
+    <h2>⭐ スタンプコレクション</h2>
+    <div><span id="count" class="count">0</span><span style="font-size:22px;font-weight:900"> / 5</span></div>
+    <div class="bar"><div id="fill" class="fill"></div></div>
+    <p id="progressText" style="font-weight:900;margin-bottom:0">まずは1個見つけよう！</p>
+  </div>
+  <div class="card">
+    <div id="stampList" class="stamps"></div>
+    <button class="bigBtn green" onclick="openScanner()">📷 QRコードを読み取る</button>
+    <button class="bigBtn blue" onclick="showHowTo()">❓ あそびかた</button>
+  </div>
+  <div class="card">
+    <button class="bigBtn gray" onclick="resetGame()">🔄 最初からやり直す</button>
+  </div>
+</section>
 
-        <div class="header-icon">
-            📷
-        </div>
+<section id="scanner" class="screen">
+  <div class="card">
+    <h2 style="text-align:center">📷 QRコードを読み取ろう！</h2>
+    <div id="status" class="status">カメラを起動しています…</div>
+    <div id="reader" style="margin-top:14px"></div>
+    <div id="scanError" class="error"></div>
+    <button class="bigBtn gray" onclick="closeScanner()">← 戻る</button>
+  </div>
+</section>
 
-        <h1>
-            QRコードを読もう！
-        </h1>
+<section id="get" class="screen">
+  <div class="card result">
+    <div class="star">⭐</div>
+    <div class="getTitle">スタンプGET！</div>
+    <p id="getName" style="font-size:24px;font-weight:900"></p>
+    <p id="getMessage" style="font-size:19px;font-weight:800"></p>
+    <button class="bigBtn" onclick="afterGet()">⭐ 次へ</button>
+  </div>
+</section>
 
-        <div class="description">
-            QRコードをカメラに映してください。
-        </div>
-
+<section id="complete" class="screen">
+  <div class="card complete">
+    <div class="completeIcon">🎉</div>
+    <h1>コンプリート！</h1>
+    <p style="font-size:21px;font-weight:900">5つのスタンプを全部集めたね！</p>
+    <div style="font-size:58px">⭐ ⭐ ⭐ ⭐ ⭐</div>
+    <p style="font-size:22px;font-weight:900">🏆 せなみ探検隊マスター！</p>
+    <div class="card" style="background:#fff3a3">
+      <p style="font-size:19px;font-weight:900">🎁 景品交換</p>
+      <p style="font-weight:800">この画面をスタッフの方に見せてください。</p>
     </div>
+    <button class="bigBtn blue" onclick="showScreen('game')">⭐ スタンプを見る</button>
+  </div>
+</section>
 
-
-    <!-- 状態表示 -->
-
-    <div class="card">
-
-        <div id="status"
-             class="status">
-
-            「カメラを起動」を押してください。
-
-        </div>
-
-    </div>
-
-
-    <!-- カメラ -->
-
-    <div class="card">
-
-        <div id="reader"></div>
-
-        <button
-            id="startButton"
-            onclick="startScanner()">
-
-            📷 カメラを起動
-
-        </button>
-
-        <button
-            id="stopButton"
-            class="stop"
-            onclick="stopScanner()"
-            style="display:none;">
-
-            ⏹ カメラを停止
-
-        </button>
-
-    </div>
-
-
-    <!-- 読み取った文字 -->
-
-    <div
-        id="result"
-        class="result">
-
-        <div class="result-title">
-
-            🎉 QRコードを読み取りました！
-
-        </div>
-
-        <div
-            id="resultText"
-            class="result-text">
-        </div>
-
-    </div>
-
-
-    <!-- エラー -->
-
-    <div
-        id="error"
-        class="error">
-    </div>
-
-
-    <div class="card small">
-
-        <strong>対応予定端末</strong><br><br>
-
-        iPhone / Safari<br>
-        iPhone / Chrome<br>
-        Android / Chrome<br>
-        Android / Firefox<br>
-        Android / Samsung Internet<br>
-        iPad / Androidタブレット
-
-        <br><br>
-
-        ※カメラを使用するため、
-        HTTPSで公開されたページから
-        起動してください。
-
-    </div>
-
+<div class="note">せなみ探検隊！スタンプラリー</div>
 </div>
 
-
 <script>
-
 /*
-==========================================================
- QRコード読み取り
-==========================================================
-*/
+ * ==========================================================
+ * せなみ探検隊！本番版
+ *
+ * QRコードの中身：
+ * SENAMI:QR01
+ * SENAMI:QR02
+ * SENAMI:QR03
+ * SENAMI:QR04
+ * SENAMI:QR05
+ *
+ * 施設名は下の STAMPS の name を変更してください。
+ * ==========================================================
+ */
 
+const STAMPS = [
+  {id:"QR01",name:"スタンプスポット①",icon:"🌊"},
+  {id:"QR02",name:"スタンプスポット②",icon:"🐚"},
+  {id:"QR03",name:"スタンプスポット③",icon:"🐟"},
+  {id:"QR04",name:"スタンプスポット④",icon:"🦀"},
+  {id:"QR05",name:"スタンプスポット⑤",icon:"🏖️"}
+];
+
+const STORAGE_KEY = "senami_stamp_rally_v2";
+let collected = loadStamps();
 let scanner = null;
-
 let scannerRunning = false;
+let scanLock = false;
 
-let readingLock = false;
+document.addEventListener("DOMContentLoaded",()=>{
+  renderStamps();
+  updateProgress();
+});
 
-
-/*
-----------------------------------------------------------
- ステータス表示
-----------------------------------------------------------
-*/
-
-function setStatus(message) {
-
-    document.getElementById("status")
-        .innerHTML = message;
-
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0,0);
 }
 
-
-/*
-----------------------------------------------------------
- エラー表示
-----------------------------------------------------------
-*/
-
-function showError(message) {
-
-    const error =
-        document.getElementById("error");
-
-    error.innerHTML = message;
-
-    error.style.display = "block";
-
+function startGame(){
+  renderStamps();
+  updateProgress();
+  showScreen("game");
 }
 
-
-/*
-----------------------------------------------------------
- エラー消去
-----------------------------------------------------------
-*/
-
-function clearError() {
-
-    const error =
-        document.getElementById("error");
-
-    error.innerHTML = "";
-
-    error.style.display = "none";
-
+function renderStamps(){
+  const list=document.getElementById("stampList");
+  list.innerHTML="";
+  STAMPS.forEach((stamp,i)=>{
+    const got=collected.includes(stamp.id);
+    const div=document.createElement("div");
+    div.className="stamp"+(got?" got":"");
+    div.innerHTML=`
+      <div class="stampIcon">${got?stamp.icon:"❓"}</div>
+      <div class="stampNo">STAMP ${i+1}</div>
+      <div class="stampName">${got?escapeHtml(stamp.name):"？？？"}</div>
+      ${got?'<div class="check">✓</div>':""}
+    `;
+    list.appendChild(div);
+  });
 }
 
+function updateProgress(){
+  const n=collected.length;
+  document.getElementById("count").textContent=n;
+  document.getElementById("fill").style.width=(n/STAMPS.length*100)+"%";
+  document.getElementById("progressText").textContent=
+    n===0?"まずは1個見つけよう！":
+    n<STAMPS.length?`あと ${STAMPS.length-n} 個！`:
+    "全部集めたよ！🎉";
+}
 
-/*
-----------------------------------------------------------
- カメラ開始
-----------------------------------------------------------
-*/
+async function openScanner(){
+  showScreen("scanner");
+  scanLock=false;
+  document.getElementById("scanError").style.display="none";
+  document.getElementById("status").innerHTML="📷 カメラを起動しています…";
 
-async function startScanner() {
+  if(location.protocol!=="https:" &&
+     location.hostname!=="localhost" &&
+     location.hostname!=="127.0.0.1"){
+    showScanError("🔒 HTTPSのページを直接開いてください。");
+    return;
+  }
 
-    clearError();
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    showScanError("このブラウザではカメラを利用できません。iPhoneはSafari、AndroidはChromeをお試しください。");
+    return;
+  }
 
-    readingLock = false;
+  let testStream=null;
+  try{
+    testStream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:{ideal:"environment"}},
+      audio:false
+    });
+  }catch(e){
+    handleCameraError(e);
+    return;
+  }finally{
+    if(testStream) testStream.getTracks().forEach(t=>t.stop());
+  }
 
-    setStatus(
-        "📷 カメラを起動しています…"
+  try{
+    if(scanner){
+      try{await scanner.clear();}catch(e){}
+      scanner=null;
+    }
+
+    scanner=new Html5Qrcode("reader");
+
+    await scanner.start(
+      {facingMode:"environment"},
+      {
+        fps:10,
+        qrbox:(w,h)=>{
+          const size=Math.floor(Math.min(w,h)*0.70);
+          return {width:size,height:size};
+        },
+        aspectRatio:1.0,
+        rememberLastUsedCamera:true
+      },
+      onScanSuccess,
+      ()=>{}
     );
 
-
-    /*
-    ------------------------------------------------------
-     HTTPSチェック
-    ------------------------------------------------------
-    */
-
-    if (
-        location.protocol !== "https:" &&
-        location.hostname !== "localhost" &&
-        location.hostname !== "127.0.0.1"
-    ) {
-
-        showError(
-            "🔒 このページはHTTPSで開く必要があります。<br><br>" +
-            "QRコードを読むには、https:// から始まるページで開いてください。"
-        );
-
-        setStatus(
-            "❌ HTTPSが必要です"
-        );
-
-        return;
-    }
-
-
-    /*
-    ------------------------------------------------------
-     ブラウザのカメラ機能チェック
-    ------------------------------------------------------
-    */
-
-    if (
-        !navigator.mediaDevices ||
-        !navigator.mediaDevices.getUserMedia
-    ) {
-
-        showError(
-            "このブラウザではカメラ機能を利用できません。<br><br>" +
-            "iPhoneの場合はSafari、Androidの場合はChromeをお試しください。"
-        );
-
-        setStatus(
-            "❌ カメラに対応していません"
-        );
-
-        return;
-    }
-
-
-    /*
-    ------------------------------------------------------
-     カメラ権限を確認
-    ------------------------------------------------------
-    */
-
-    let testStream = null;
-
-    try {
-
-        testStream =
-            await navigator.mediaDevices.getUserMedia({
-
-                video: {
-                    facingMode: {
-                        ideal: "environment"
-                    }
-                },
-
-                audio: false
-
-            });
-
-
-    } catch (error) {
-
-        handleCameraError(error);
-
-        return;
-
-    } finally {
-
-        if (testStream) {
-
-            testStream
-                .getTracks()
-                .forEach(track => {
-                    track.stop();
-                });
-
-        }
-
-    }
-
-
-    /*
-    ------------------------------------------------------
-     QRリーダー作成
-    ------------------------------------------------------
-    */
-
-    try {
-
-        if (scanner) {
-
-            try {
-                await scanner.clear();
-            } catch(e) {}
-
-            scanner = null;
-
-        }
-
-
-        scanner =
-            new Html5Qrcode("reader");
-
-
-        const config = {
-
-            fps: 10,
-
-            qrbox: function(
-                width,
-                height
-            ) {
-
-                const size =
-                    Math.min(
-                        width,
-                        height
-                    ) * 0.7;
-
-                return {
-
-                    width: Math.floor(size),
-
-                    height: Math.floor(size)
-
-                };
-
-            },
-
-            aspectRatio: 1.0,
-
-            rememberLastUsedCamera: true
-
-        };
-
-
-        /*
-        --------------------------------------------------
-         背面カメラ優先
-        --------------------------------------------------
-        */
-
-        await scanner.start(
-
-            {
-                facingMode: "environment"
-            },
-
-            config,
-
-            onQRCodeSuccess,
-
-            onQRCodeFailure
-
-        );
-
-
-        scannerRunning = true;
-
-
-        document.getElementById(
-            "startButton"
-        ).style.display = "none";
-
-
-        document.getElementById(
-            "stopButton"
-        ).style.display = "block";
-
-
-        setStatus(
-            "📷 QRコードをカメラに映してください。"
-        );
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        handleCameraError(error);
-
-    }
-
+    scannerRunning=true;
+    document.getElementById("status").innerHTML="📷 QRコードをカメラに映してください。";
+  }catch(e){
+    handleCameraError(e);
+  }
 }
 
-
-/*
-----------------------------------------------------------
- カメラエラー処理
-----------------------------------------------------------
-*/
-
-function handleCameraError(error) {
-
-    console.error(
-        "Camera Error:",
-        error
-    );
-
-
-    let message = "";
-
-
-    if (
-        error.name ===
-        "NotAllowedError"
-    ) {
-
-        message =
-            "📵 カメラの使用が許可されていません。<br><br>" +
-
-            "iPhone：<br>" +
-            "Safariのカメラ使用許可を確認してください。<br><br>" +
-
-            "Android：<br>" +
-            "Chromeのカメラ使用許可を確認してください。";
-
-    }
-
-    else if (
-        error.name ===
-        "NotFoundError"
-    ) {
-
-        message =
-            "📷 カメラが見つかりませんでした。";
-
-    }
-
-    else if (
-        error.name ===
-        "NotReadableError"
-    ) {
-
-        message =
-            "📷 カメラを使用できません。<br><br>" +
-            "他のアプリがカメラを使用していないか確認してください。";
-
-    }
-
-    else if (
-        error.name ===
-        "SecurityError"
-    ) {
-
-        message =
-            "🔒 ブラウザのセキュリティ設定により、" +
-            "カメラを使用できません。";
-
-    }
-
-    else if (
-        error.name ===
-        "TypeError"
-    ) {
-
-        message =
-            "🔒 カメラを使用できないページ環境です。<br><br>" +
-            "HTTPSのページを直接開いてください。";
-
-    }
-
-    else {
-
-        message =
-            "カメラを起動できませんでした。<br><br>" +
-
-            "エラー：" +
-            (error.name || "Unknown") +
-            "<br><br>" +
-
-            (error.message || "");
-
-    }
-
-
-    showError(message);
-
-    setStatus(
-        "❌ カメラを起動できませんでした"
-    );
-
+function showScanError(message){
+  const box=document.getElementById("scanError");
+  box.innerHTML=message;
+  box.style.display="block";
+  document.getElementById("status").innerHTML="❌ カメラを起動できませんでした";
 }
 
-
-/*
-----------------------------------------------------------
- QR読み取り成功
-----------------------------------------------------------
-*/
-
-async function onQRCodeSuccess(
-    decodedText,
-    decodedResult
-) {
-
-    /*
-     * 連続読み取り防止
-     */
-
-    if (readingLock) {
-        return;
-    }
-
-    readingLock = true;
-
-
-    console.log(
-        "QR DATA:",
-        decodedText
-    );
-
-
-    /*
-    ------------------------------------------------------
-     読み取った文字を表示
-    ------------------------------------------------------
-    */
-
-    document.getElementById(
-        "resultText"
-    ).textContent = decodedText;
-
-
-    document.getElementById(
-        "result"
-    ).style.display = "block";
-
-
-    setStatus(
-        "🎉 QRコードの読み取りに成功しました！"
-    );
-
-
-    /*
-    ------------------------------------------------------
-     カメラ停止
-    ------------------------------------------------------
-    */
-
-    await stopScanner();
-
-
+function handleCameraError(e){
+  console.error(e);
+  let m;
+  if(e.name==="NotAllowedError"){
+    m="📵 カメラの使用が許可されていません。ブラウザのカメラ設定で許可してください。";
+  }else if(e.name==="NotFoundError"){
+    m="📷 カメラが見つかりませんでした。";
+  }else if(e.name==="NotReadableError"){
+    m="📷 カメラを使用できません。他のアプリがカメラを使用していないか確認してください。";
+  }else if(e.name==="SecurityError"){
+    m="🔒 ブラウザのセキュリティ設定によりカメラを使用できません。";
+  }else{
+    m="カメラを起動できませんでした。<br><br>エラー："+(e.name||"Unknown");
+  }
+  showScanError(m);
 }
 
-
-/*
-----------------------------------------------------------
- QR読み取り中
-----------------------------------------------------------
-*/
-
-function onQRCodeFailure(errorMessage) {
-
-    /*
-     * QRがまだ見つからないだけなので、
-     * ここでは何もしません。
-     */
-
+function findStampFromQR(text){
+  const v=String(text).trim().toUpperCase();
+  return STAMPS.find(s=>v===s.id || v==="SENAMI:"+s.id || v.includes(s.id))||null;
 }
 
+async function onScanSuccess(decodedText){
+  if(scanLock)return;
+  scanLock=true;
 
-/*
-----------------------------------------------------------
- カメラ停止
-----------------------------------------------------------
-*/
+  const stamp=findStampFromQR(decodedText);
 
-async function stopScanner() {
+  if(!stamp){
+    showScanError("❌ このQRコードは、せなみ探検隊のQRコードではありません。");
+    setTimeout(()=>scanLock=false,1500);
+    return;
+  }
 
-    if (!scanner) {
-        return;
-    }
+  if(collected.includes(stamp.id)){
+    showScanError("⭐ このスタンプはもうGETしています！");
+    setTimeout(()=>scanLock=false,1500);
+    return;
+  }
 
+  collected.push(stamp.id);
+  saveStamps();
+  await stopScanner();
 
-    try {
+  document.getElementById("getName").textContent=stamp.name;
 
-        if (scannerRunning) {
+  if(collected.length===STAMPS.length){
+    document.getElementById("getMessage").innerHTML="5個全部集まったよ！<br>すごい！🎉";
+  }else{
+    document.getElementById("getMessage").innerHTML=`あと ${STAMPS.length-collected.length} 個！<br>次のスタンプを探そう！`;
+  }
 
-            await scanner.stop();
-
-        }
-
-    } catch(error) {
-
-        console.log(
-            "Scanner stop error:",
-            error
-        );
-
-    }
-
-
-    try {
-
-        await scanner.clear();
-
-    } catch(error) {
-
-        console.log(
-            "Scanner clear error:",
-            error
-        );
-
-    }
-
-
-    scannerRunning = false;
-
-    scanner = null;
-
-
-    document.getElementById(
-        "startButton"
-    ).style.display = "block";
-
-
-    document.getElementById(
-        "stopButton"
-    ).style.display = "none";
-
-
+  renderStamps();
+  updateProgress();
+  showScreen("get");
+  setTimeout(()=>scanLock=false,800);
 }
 
+async function stopScanner(){
+  if(!scanner)return;
+  try{if(scannerRunning)await scanner.stop();}catch(e){}
+  try{await scanner.clear();}catch(e){}
+  scanner=null;
+  scannerRunning=false;
+}
 
-/*
-----------------------------------------------------------
- ページを閉じるときにカメラ停止
-----------------------------------------------------------
-*/
+async function closeScanner(){
+  await stopScanner();
+  showScreen("game");
+}
 
-window.addEventListener(
-    "beforeunload",
-    function() {
+function afterGet(){
+  if(collected.length===STAMPS.length){
+    showScreen("complete");
+  }else{
+    showScreen("game");
+  }
+}
 
-        if (scanner) {
+function showHowTo(){
+  alert("🌟 あそびかた 🌟\n\n① 施設内のQRコードを探す\n\n②「QRコードを読み取る」を押す\n\n③ QRコードをカメラに映す\n\n④ スタンプGET！\n\n⑤ 5個集めたらコンプリート！");
+}
 
-            try {
-                scanner.stop();
-            } catch(e) {}
+function saveStamps(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(collected));}catch(e){}
+}
 
-        }
+function loadStamps(){
+  try{
+    const a=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+    return Array.isArray(a)?a.filter(id=>STAMPS.some(s=>s.id===id)):[];
+  }catch(e){return [];}
+}
 
-    }
-);
+function resetGame(){
+  if(!confirm("集めたスタンプを全部消します。本当にリセットしますか？"))return;
+  collected=[];
+  saveStamps();
+  renderStamps();
+  updateProgress();
+  showScreen("game");
+}
 
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+window.addEventListener("beforeunload",()=>{
+  if(scanner){try{scanner.stop();}catch(e){}}
+});
 </script>
-
 </body>
 </html>
