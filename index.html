@@ -246,7 +246,7 @@ function showScanError(message){
   const box=document.getElementById("scanError");
   box.innerHTML=message;
   box.style.display="block";
-  document.getElementById("status").innerHTML="❌ カメラを起動できませんでした\n QRコードが違います。";
+  document.getElementById("status").innerHTML="❌ カメラを起動できませんでした。 QRコードが違います。";
 }
 
 function handleCameraError(e){
