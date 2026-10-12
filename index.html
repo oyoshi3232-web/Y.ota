@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="theme-color" content="#63c7ed">
-<title>ふれあいIN せなみ探検隊！5つのスタンプを集めよう！</title>
+<title>ふれあい IN せなみ探検隊！5つのスタンプを集めよう！</title>
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -38,7 +38,7 @@ p{line-height:1.7}
 <section id="start" class="screen active">
   <div class="logo">
     <div class="logoIcon">🌊</div>
-    <h1>ふれあいIN せなみ 探検隊！<br>5つのスタンプを集めよう！</h1>
+    <h1>ふれあい IN せなみ 探検隊！<br>5つのスタンプを集めよう！</h1>
     <p><strong>施設の中にある5つのQRコードを探して、<br>スタンプを集めよう！</strong></p>
   </div>
   <div class="card">
@@ -95,7 +95,7 @@ p{line-height:1.7}
     <h1>コンプリート！</h1>
     <p style="font-size:21px;font-weight:900">5つのスタンプを全部集めたね！</p>
     <div style="font-size:58px">⭐ ⭐ ⭐ ⭐ ⭐</div>
-    <p style="font-size:22px;font-weight:900">🏆 ふれあいIN せなみ探検隊マスター!！</p>
+    <p style="font-size:22px;font-weight:900">🏆 ふれあい IN せなみ探検隊マスター!！</p>
     <div class="card" style="background:#fff3a3">
       <p style="font-size:19px;font-weight:900">🎁 景品交換</p>
       <p style="font-weight:800">この画面をスタッフの方に見せてください。</p>
@@ -104,7 +104,7 @@ p{line-height:1.7}
   </div>
 </section>
 
-<div class="note">ふれあいIN せなみ探検隊！スタンプラリー</div>
+<div class="note">ふれあい IN せなみ探検隊！スタンプラリー</div>
 </div>
 
 <script>
@@ -278,7 +278,7 @@ async function onScanSuccess(decodedText){
   const stamp=findStampFromQR(decodedText);
 
   if(!stamp){
-    showScanError("❌ このQRコードは、ふれあいIN せなみ探検隊のQRコードではありません。");
+    showScanError("❌ このQRコードは、ふれあい IN せなみ探検隊のQRコードではありません。");
     setTimeout(()=>scanLock=false,1500);
     return;
   }
